@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Running application locally
 
-## Getting Started
+#### You need to have Docker installed to run the application with the required DB
 
-First, run the development server:
+* After cloning the repository, rename the `.env.sample` file to `.env`
+* Run `docker-compose up --build -d` (if using a linux dist add a `sudo` before the command)
+* After the containers are up, access `localhost:3000/dashboard`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Summary
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This application is a simple product control with versioning. 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+After running the application locally access `localhost:3000/` or `localhost:3000/dashboard` to see all the published products.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Access `localhost:3000/dashboard/modification-requests` to see all the change requests waiting for approval; 
+You may click on the "Approve" button from each line to publish the change. Doing so, the modification will be available 
+in the product listing;
 
-## Learn More
+Access `localhost:3000/dashboard/published-modifications` to see all the change once applied (publication history);
 
-To learn more about Next.js, take a look at the following resources:
+You can add a new Product accessing `localhost:3000/dashboard` and clicking at "Create Product"; Fill the form and then confirm;
+Products initially created do not need approvals, only modifications;
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You can create a new Product Modification Request accessing `localhost:3000/dashboard` and clicking at "Edit" button
+from each product row; Udpate the form and then confirm; This modification request will now appear at 
+`localhost:3000/dashboard/modification-requests`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+____
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+We can perform the same actions by using the API.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+`GET` - `http://localhost:3000/api/product`
+
+List all the products available
+
+
+`POST` - `http://localhost:3000/api/product`
+
+Create a new product
+
+`GET` - `http://localhost:3000/api/product-modification`
+
+List all the pendent products modifications
+
+#### Query Params 
+
+* *productId* (Optional) - If provided, it fetches only the modification requests for the defined product 
+
+`POST` - `http://localhost:3000/api/product-modification`
+
+Create a new product modifications
+
+#### Body Params (Form Data) 
+
+* *product_id*
+* *name*
+* *price* 
+
+`POST` - `http://localhost:3000/api/product-modification/approve`
+
+Approves a defined product modifications
+
+#### Body Params (Form Data) 
+
+* *modification_id*
+
+
