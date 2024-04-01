@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model product {
+  name                 String
+  id                   Int                    @id(map: "product_pk") @default(autoincrement())
+  price                Float                  @db.Real
+  created_at           DateTime?              @db.Date
+  updated_at           DateTime?              @db.Date
+  product_modification product_modification[]
+  product_post         product_post[]
+}
+
+model product_modification {
+  id           Int            @id(map: "product_modification_pk") @default(autoincrement())
+  product_id   Int            @default(autoincrement())
+  new_price    Float          @db.Real
+  created_at   DateTime       @db.Date
+  new_name     String
+  product      product        @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_id")
+  product_post product_post[]
+}
+
+model product_post {
+  id                   Int                  @id(map: "product_post_pk") @default(autoincrement())
+  product_id           Int                  @default(autoincrement())
+  published_at         DateTime?            @db.Date
+  modification_id      Int                  @default(autoincrement())
+  product_modification product_modification @relation(fields: [modification_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "modification_id")
+  product              product              @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_id")
+}
+
+model user {
+  id   Int    @id(map: "user_pk") @default(autoincrement())
+  name String
+}
