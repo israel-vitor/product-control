@@ -11,8 +11,8 @@ model product {
   name                 String
   id                   Int                    @id(map: "product_pk") @default(autoincrement())
   price                Float                  @db.Real
-  created_at           DateTime?              @db.Date
-  updated_at           DateTime?              @db.Date
+  created_at           DateTime?              @db.Timestamp(6)
+  updated_at           DateTime?              @db.Timestamp(6)
   product_modification product_modification[]
   product_post         product_post[]
 }
@@ -21,8 +21,9 @@ model product_modification {
   id           Int            @id(map: "product_modification_pk") @default(autoincrement())
   product_id   Int            @default(autoincrement())
   new_price    Float          @db.Real
-  created_at   DateTime       @db.Date
+  created_at   DateTime       @db.Timestamp(6)
   new_name     String
+  applied      Boolean?
   product      product        @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_id")
   product_post product_post[]
 }
@@ -30,13 +31,8 @@ model product_modification {
 model product_post {
   id                   Int                  @id(map: "product_post_pk") @default(autoincrement())
   product_id           Int                  @default(autoincrement())
-  published_at         DateTime?            @db.Date
+  published_at         DateTime?            @db.Timestamp(6)
   modification_id      Int                  @default(autoincrement())
   product_modification product_modification @relation(fields: [modification_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "modification_id")
   product              product              @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_id")
-}
-
-model user {
-  id   Int    @id(map: "user_pk") @default(autoincrement())
-  name String
 }
