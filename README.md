@@ -3,6 +3,7 @@
 #### You need to have Docker installed to run the application with the required DB
 
 * After cloning the repository, rename the `.env.sample` file to `.env`
+* Put the correct credentials for your postgresql database at `POSTGRES_USER` and `POSTGRES_PASSWORD` in `.env`
 * Run `docker-compose up --build -d` (if using a linux dist add a `sudo` before the command)
 * After the containers are up, access `localhost:3000/dashboard`
 
